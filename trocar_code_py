@@ -1,0 +1,36 @@
+Python
+import requests
+
+CLIENT_ID = "SEU_CLIENT_ID_AQUI"
+CLIENT_SECRET = "SEU_CLIENT_SECRET_AQUI"  # Pegue no DevCenter
+REDIRECT_URI = "SUA_URL_DO_WEBHOOK_SITE"  # A mesma cadastrada no app
+CODE = "O_CODE_QUE_VOCE_COPIOU_DO_WEBHOOK_SITE"
+
+url = "https://api.mercadolibre.com/oauth/token"
+
+payload = {
+    "grant_type": "authorization_code",
+    "client_id": CLIENT_ID,
+    "client_secret": CLIENT_SECRET,
+    "code": CODE,
+    "redirect_uri": REDIRECT_URI,
+}
+
+headers = {
+    "accept": "application/json",
+    "content-type": "application/x-www-form-urlencoded",
+}
+
+response = requests.post(url, data=payload, headers=headers)
+
+if response.status_code == 200:
+  dados = response.json()
+  print("\n" + "=" * 50)
+  print(" AUTENTICAÇÃO REALIZADA COM SUCESSO!")
+  print("=" * 50)
+  print(f"Access Token:  {dados.get('access_token')}")
+  print(f"Refresh Token: {dados.get('refresh_token')}")
+  print(f"User ID:        {dados.get('user_id')}")
+  print("=" * 50 + "\n")
+else:
+  print(f"\nErro ({response.status_code}):", response.text)
